@@ -9,14 +9,18 @@ const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isValidToken, setIsValidToken] = useState(false);
+  const [userEmail, setUserEmail] = useState(null);
 
   useEffect(() => {
-    // Check if token exists in localStorage
-    const resetRequests = JSON.parse(
-      localStorage.getItem("resetRequests") || "[]"
-    );
-    const validRequest = resetRequests.find((req) => req.token === token);
-    setIsValidToken(!!validRequest);
+    const resetRequests = JSON.parse(localStorage.getItem("resetRequests") || "[]");
+    const foundRequest = resetRequests.find((req) => req.token === token);
+
+    if (foundRequest) {
+      setIsValidToken(true);
+      setUserEmail(foundRequest.email);
+    } else {
+      setIsValidToken(false);
+    }
   }, [token]);
 
   const handleSubmit = (e) => {
@@ -33,40 +37,23 @@ const ResetPasswordPage = () => {
     }
 
     try {
-      // Get users and reset requests from localStorage
       const users = JSON.parse(localStorage.getItem("users") || "[]");
-      const resetRequests = JSON.parse(
-        localStorage.getItem("resetRequests") || "[]"
+      const resetRequests = JSON.parse(localStorage.getItem("resetRequests") || "[]");
+
+      const updatedUsers = users.map((user) =>
+        user.email === userEmail ? { ...user, password } : user
       );
 
-      const resetRequest = resetRequests.find((req) => req.token === token);
-      if (!resetRequest) {
-        toast.error("Invalid or expired reset token");
-        return;
-      }
+      const updatedResetRequests = resetRequests.filter((req) => req.token !== token);
 
-      // Update user's password
-      const updatedUsers = users.map((user) => {
-        if (user.email === resetRequest.email) {
-          return { ...user, password };
-        }
-        return user;
-      });
-
-      // Remove used reset token
-      const updatedResetRequests = resetRequests.filter(
-        (req) => req.token !== token
-      );
-
-      // Save to localStorage
       localStorage.setItem("users", JSON.stringify(updatedUsers));
       localStorage.setItem("resetRequests", JSON.stringify(updatedResetRequests));
 
       toast.success("Password reset successfully!");
       setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
-      console.error("Password reset error:", error);
-      toast.error("Failed to reset password. Please try again.");
+      console.error("Error during reset:", error);
+      toast.error("Something went wrong. Please try again.");
     }
   };
 
@@ -87,10 +74,7 @@ const ResetPasswordPage = () => {
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 text-sm font-medium mb-2"
-            >
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
               New Password
             </label>
             <input
@@ -100,15 +84,12 @@ const ResetPasswordPage = () => {
               placeholder="Enter new password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              minLength={6}
               required
             />
           </div>
+
           <div className="mb-4">
-            <label
-              htmlFor="confirmPassword"
-              className="block text-gray-700 text-sm font-medium mb-2"
-            >
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
               Confirm Password
             </label>
             <input
@@ -118,10 +99,10 @@ const ResetPasswordPage = () => {
               placeholder="Confirm new password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              minLength={6}
               required
             />
           </div>
+
           <button
             type="submit"
             className="w-full bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700 transition"

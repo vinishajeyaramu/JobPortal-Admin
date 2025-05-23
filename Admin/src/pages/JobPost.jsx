@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { ThemeContext } from "../App";
 import AddJob from "../components/AddJobPost";
@@ -12,24 +12,33 @@ function JobPost() {
   const { job: jobs, setJob: setJobs } = useContext(ThemeContext);
 
   const [view, setView] = useState(false);
-  const [viewId, setViewId] = useState("");
+  const [viewId, setViewId] = useState(null);
   const [isAdd, setIsAdd] = useState(false);
-  const [editId, setEditId] = useState("");
+  const [editId, setEditId] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
 
+  // Optional: Sync with localStorage on mount if needed
+  useEffect(() => {
+    const storedJobs = localStorage.getItem("jobs");
+    if (storedJobs) {
+      setJobs(JSON.parse(storedJobs));
+    }
+  }, [setJobs]);
+
+  // Filter jobs by title (case-insensitive)
   const filteredItems = jobs.filter((item) =>
     item.job_title?.toLowerCase().includes(filterText.toLowerCase())
   );
 
   const handleView = (id) => {
-    setView(true);
     setViewId(id);
+    setView(true);
   };
 
   const handleEdit = (row) => {
-    const id = row.id || row.job_id;
+    const id = row.job_id || row.id;
     setEditId(id);
     setIsEdit(true);
   };
@@ -39,61 +48,72 @@ function JobPost() {
       name: "Title",
       selector: (row) => row.job_title,
       sortable: true,
+      wrap: true,
     },
     {
       name: "Skills",
-      selector: (row) => row.job_technical_skills?.join(", "),
+      selector: (row) => (row.job_technical_skills ? row.job_technical_skills.join(", ") : ""),
       sortable: true,
+      wrap: true,
     },
     {
       name: "Location",
       selector: (row) => row.job_location,
       sortable: true,
+      wrap: true,
     },
     {
       name: "Category",
       selector: (row) => row.job_category,
       sortable: true,
+      wrap: true,
     },
     {
       name: "Status",
       selector: (row) => row.job_status,
       sortable: true,
+      wrap: true,
     },
     {
       name: "Actions",
       cell: (row) => (
-        <div className="space-x-5">
+        <div className="space-x-3">
           <button
             className="rounded-md border-green-500 border-2 p-[3px] text-green-600 hover:text-green-800"
             onClick={() => handleEdit(row)}
+            aria-label={`Edit job post: ${row.job_title}`}
           >
             <Edit size={15} />
           </button>
           <button
             className="border-blue-500 text-blue-500 border-2 p-[3px] rounded-md"
             onClick={() => handleView(row.job_id || row.id)}
+            aria-label={`View job post: ${row.job_title}`}
           >
             <Eye size={15} />
           </button>
         </div>
       ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
     },
   ];
 
   return (
-    <div className="px-6 bg-gray-100 rounded-md">
+    <div className="px-6 bg-gray-100 rounded-md min-h-screen">
       <ToastContainer />
-      <div className="flex justify-center items-center bg-slate-100">
-        <div className="flex pt-6 flex-col h-auto w-full px-6 shadow-lg rounded-xl bg-white">
+      <div className="flex justify-center items-center bg-slate-100 py-8">
+        <div className="flex flex-col h-auto w-full max-w-7xl px-6 shadow-lg rounded-xl bg-white">
+          {/* Header and Controls */}
           <div className="flex justify-between p-4">
-            <h1 className="text-2xl font-bold">JobPost</h1>
-            <div className="flex gap-5">
+            <h1 className="text-2xl font-bold">Job Posts</h1>
+            <div className="flex items-center gap-5">
               <div>
                 <input
                   type="text"
                   className="border-2 p-1 rounded-lg"
-                  placeholder="Filter By Name"
+                  placeholder="Filter by Title"
                   value={filterText}
                   onChange={(e) => setFilterText(e.target.value)}
                 />
@@ -103,6 +123,7 @@ function JobPost() {
                     setFilterText("");
                     setResetPaginationToggle(!resetPaginationToggle);
                   }}
+                  aria-label="Clear filter"
                 >
                   Clear
                 </button>
@@ -110,29 +131,34 @@ function JobPost() {
               <button
                 className="w-40 rounded-lg h-8 bg-black text-white"
                 onClick={() => setIsAdd(true)}
+                aria-label="Create new job post"
               >
                 Create JobPost
               </button>
             </div>
           </div>
 
+          {/* Data Table */}
           <DataTable
             columns={columns}
             data={filteredItems}
             pagination
             paginationResetDefaultPage={resetPaginationToggle}
             persistTableHead
+            highlightOnHover
+            dense
+            noDataComponent="No job posts found"
           />
         </div>
       </div>
 
+      {/* Add Job Post Modal */}
       {isAdd && (
         <AddJob
           isAdd={isAdd}
           setIsAdd={setIsAdd}
           job={jobs}
           setJob={setJobs}
-          setOpen={setIsAdd}
           onSuccess={() => {
             setIsAdd(false);
             const updatedJobs = JSON.parse(localStorage.getItem("jobs") || "[]");
@@ -142,6 +168,7 @@ function JobPost() {
         />
       )}
 
+      {/* Edit Job Post Modal */}
       {isEdit && (
         <EditJobPost
           isEdit={isEdit}
@@ -158,6 +185,7 @@ function JobPost() {
         />
       )}
 
+      {/* View Job Post Modal */}
       {view && (
         <ViewJobPost
           jobs={jobs}

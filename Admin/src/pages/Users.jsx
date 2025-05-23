@@ -4,7 +4,7 @@ import { Edit, Trash2 } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Initial static users data
+// Static users if localStorage is empty
 const initialUsers = [
   {
     id: 1,
@@ -72,9 +72,7 @@ const AddUsers = ({ onClose, onSubmit, editData }) => {
           onChange={(e) => setUserName(e.target.value)}
           className="border p-2 rounded-md w-full mb-4 outline-none focus:ring-2 focus:ring-blue-300"
         />
-        {errors.userName && (
-          <p className="text-red-500 text-sm">{errors.userName}</p>
-        )}
+        {errors.userName && <p className="text-red-500 text-sm">{errors.userName}</p>}
         <input
           type="email"
           placeholder="Enter Email"
@@ -82,9 +80,7 @@ const AddUsers = ({ onClose, onSubmit, editData }) => {
           onChange={(e) => setUserEmail(e.target.value)}
           className="border p-2 rounded-md w-full mb-4 outline-none focus:ring-2 focus:ring-blue-300"
         />
-        {errors.userEmail && (
-          <p className="text-red-500 text-sm">{errors.userEmail}</p>
-        )}
+        {errors.userEmail && <p className="text-red-500 text-sm">{errors.userEmail}</p>}
         <input
           type="password"
           placeholder="Enter Password"
@@ -92,9 +88,7 @@ const AddUsers = ({ onClose, onSubmit, editData }) => {
           onChange={(e) => setUserCredit(e.target.value)}
           className="border p-2 rounded-md w-full mb-4 outline-none focus:ring-2 focus:ring-blue-300"
         />
-        {errors.userCredit && (
-          <p className="text-red-500 text-sm">{errors.userCredit}</p>
-        )}
+        {errors.userCredit && <p className="text-red-500 text-sm">{errors.userCredit}</p>}
         <div className="flex gap-3 justify-end">
           <button
             type="submit"
@@ -117,15 +111,21 @@ const AddUsers = ({ onClose, onSubmit, editData }) => {
 
 const Users = () => {
   const [users, setUsers] = useState(() => {
-    const savedUsers = localStorage.getItem("users");
-    return savedUsers ? JSON.parse(savedUsers) : initialUsers;
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("users");
+      return saved ? JSON.parse(saved) : initialUsers;
+    }
+    return initialUsers;
   });
+
   const [userForm, setUserForm] = useState(false);
   const [editData, setEditData] = useState(null);
 
-  // Save users to localStorage whenever they change
+  // Save users to localStorage on change
   useEffect(() => {
-    localStorage.setItem("users", JSON.stringify(users));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("users", JSON.stringify(users));
+    }
   }, [users]);
 
   const handleFormSubmit = (userData, action) => {
@@ -191,10 +191,7 @@ const Users = () => {
             <tbody>
               {users.length > 0 ? (
                 users.map((user, index) => (
-                  <tr
-                    key={user.id}
-                    className="border-b hover:bg-gray-50 transition"
-                  >
+                  <tr key={user.id} className="border-b hover:bg-gray-50 transition">
                     <td className="py-3 px-4">{index + 1}</td>
                     <td className="py-3 px-4">{user.username}</td>
                     <td className="py-3 px-4">{user.email}</td>

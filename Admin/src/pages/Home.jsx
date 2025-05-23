@@ -5,9 +5,20 @@ import { useEffect } from "react";
 function Home() {
   const navigate = useNavigate();
 
+  // Helper function to safely get auth info from localStorage
+  const getAuthFromLocalStorage = () => {
+    try {
+      const email = localStorage.getItem('email');
+      const token = localStorage.getItem('token');
+      return { email, token };
+    } catch (error) {
+      console.error("Error accessing localStorage", error);
+      return { email: null, token: null };
+    }
+  };
+
   const checkAuth = () => {
-    const email = localStorage.getItem('email');
-    const token = localStorage.getItem('token');
+    const { email, token } = getAuthFromLocalStorage();
     
     if (!email || !token) {
       navigate('/login');
@@ -16,6 +27,7 @@ function Home() {
 
   useEffect(() => {
     checkAuth();
+    // You could also add a listener here for storage event if needed
   }, []);
 
   return (

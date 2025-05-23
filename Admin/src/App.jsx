@@ -18,11 +18,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 // Create ThemeContext
 export const ThemeContext = createContext();
 
-const App = () => {
-  const [job, setJob] = useState([]);
-
-  // Your static initial job data
-  const initialJobs = [
+const initialJobs = [
   {
     job_id: 1,
     job_title: "Senior Software Engineer",
@@ -45,242 +41,222 @@ const App = () => {
     job_close_date: "2025-06-30",
     job_category: "Design",
   },
-  {
-    job_id: 3,
-    job_title: "DevOps Engineer",
-    job_experience_level: 4,
-    job_technical_skills: ["Docker", "Kubernetes", "Jenkins", "AWS", "Linux"],
-    job_location: "Hybrid",
-    job_type: ["Full-time"],
-    job_status: "Active",
-    job_close_date: "2025-08-15",
-    job_category: "Engineering",
-  },
-  {
-    job_id: 4,
-    job_title: "Product Manager",
-    job_experience_level: 6,
-    job_technical_skills: ["Agile", "JIRA", "Product Strategy", "Analytics"],
-    job_location: "Remote",
-    job_type: ["Full-time"],
-    job_status: "Active",
-    job_close_date: "2025-07-31",
-    job_category: "Management",
-  },
-  {
-    job_id: 5,
-    job_title: "Data Scientist",
-    job_experience_level: 3,
-    job_technical_skills: ["Python", "R", "Machine Learning", "SQL", "TensorFlow"],
-    job_location: "On-site",
-    job_type: ["Full-time", "Part-time"],
-    job_status: "Active",
-    job_close_date: "2025-09-30",
-    job_category: "Data Science",
-  },
-  {
-    job_id: 6,
-    job_title: "Frontend Developer",
-    job_experience_level: 2,
-    job_technical_skills: ["React", "Vue.js", "JavaScript", "CSS", "HTML"],
-    job_location: "Remote",
-    job_type: ["Contract"],
-    job_status: "Active",
-    job_close_date: "2025-05-15",
-    job_category: "Engineering",
-  },
-  {
-    job_id: 7,
-    job_title: "QA Engineer",
-    job_experience_level: 3,
-    job_technical_skills: ["Selenium", "TestNG", "Cypress", "API Testing"],
-    job_location: "Hybrid",
-    job_type: ["Full-time"],
-    job_status: "Active",
-    job_close_date: "2025-10-31",
-    job_category: "Quality Assurance",
-  },
-  {
-    job_id: 8,
-    job_title: "Technical Writer",
-    job_experience_level: 2,
-    job_technical_skills: ["Documentation", "Markdown", "API Documentation"],
-    job_location: "Remote",
-    job_type: ["Part-time", "Contract"],
-    job_status: "Active",
-    job_close_date: "2025-06-15",
-    job_category: "Content",
-  },
-  {
-    job_id: 9,
-    job_title: "Mobile App Developer",
-    job_experience_level: 4,
-    job_technical_skills: ["React Native", "Flutter", "iOS", "Android"],
-    job_location: "On-site",
-    job_type: ["Full-time"],
-    job_status: "Active",
-    job_close_date: "2025-11-30",
-    job_category: "Engineering",
-  },
-  {
-    job_id: 10,
-    job_title: "Cloud Architect",
-    job_experience_level: 7,
-    job_technical_skills: ["AWS", "Azure", "GCP", "Terraform", "CloudFormation"],
-    job_location: "Remote",
-    job_type: ["Full-time"],
-    job_status: "Active",
-    job_close_date: "2025-08-31",
-    job_category: "Engineering",
-  },
-  {
-    job_id: 11,
-    job_title: "HR Manager",
-    job_experience_level: 5,
-    job_technical_skills: ["Recruitment", "Employee Relations", "HR Policies"],
-    job_location: "On-site",
-    job_type: ["Full-time"],
-    job_status: "Active",
-    job_close_date: "2025-07-15",
-    job_category: "Human Resources",
-  },
-  {
-    job_id: 12,
-    job_title: "Blockchain Developer",
-    job_experience_level: 3,
-    job_technical_skills: ["Solidity", "Web3.js", "Smart Contracts", "Ethereum"],
-    job_location: "Remote",
-    job_type: ["Contract"],
-    job_status: "Active",
-    job_close_date: "2025-09-15",
-    job_category: "Engineering",
-  },
-  {
-    job_id: 13,
-    job_title: "Marketing Manager",
-    job_experience_level: 4,
-    job_technical_skills: ["Digital Marketing", "SEO", "Content Strategy"],
-    job_location: "Hybrid",
-    job_type: ["Full-time"],
-    job_status: "Active",
-    job_close_date: "2025-06-30",
-    job_category: "Marketing",
-  },
-  {
-    job_id: 14,
-    job_title: "System Administrator",
-    job_experience_level: 5,
-    job_technical_skills: ["Linux", "Windows Server", "Networking", "Security"],
-    job_location: "On-site",
-    job_type: ["Full-time"],
-    job_status: "Active",
-    job_close_date: "2025-10-15",
-    job_category: "IT Operations",
-  },
-  {
-    job_id: 15,
-    job_title: "Business Analyst",
-    job_experience_level: 3,
-    job_technical_skills: ["SQL", "Data Analysis", "Requirements Gathering"],
-    job_location: "Remote",
-    job_type: ["Full-time", "Part-time"],
-    job_status: "Active",
-    job_close_date: "2025-07-31",
-    job_category: "Business",
-  },
-  {
-    job_id: 16,
-    job_title: "Database Administrator",
-    job_experience_level: 4,
-    job_technical_skills: ["MySQL", "PostgreSQL", "MongoDB", "Database Design"],
-    job_location: "Hybrid",
-    job_type: ["Full-time"],
-    job_status: "Active",
-    job_close_date: "2025-08-31",
-    job_category: "Engineering",
-  },
-  {
-    job_id: 17,
-    job_title: "Project Manager",
-    job_experience_level: 6,
-    job_technical_skills: ["Agile", "Scrum", "Project Planning", "Risk Management"],
-    job_location: "On-site",
-    job_type: ["Full-time"],
-    job_status: "Active",
-    job_close_date: "2025-11-15",
-    job_category: "Management",
-  },
-  {
-    job_id: 18,
-    job_title: "Security Engineer",
-    job_experience_level: 5,
-    job_technical_skills: ["Penetration Testing", "Security Auditing", "SIEM"],
-    job_location: "Remote",
-    job_type: ["Full-time", "Contract"],
-    job_status: "Active",
-    job_close_date: "2025-09-30",
-    job_category: "Security",
-  },
-  {
-    job_id: 19,
-    job_title: "ML Engineer",
-    job_experience_level: 4,
-    job_technical_skills: ["Python", "TensorFlow", "PyTorch", "Deep Learning"],
-    job_location: "Hybrid",
-    job_type: ["Full-time"],
-    job_status: "Active",
-    job_close_date: "2025-12-15",
-    job_category: "Data Science",
-  },
-  {
-    job_id: 20,
-    job_title: "Full Stack Developer",
-    job_experience_level: 3,
-    job_technical_skills: ["React", "Node.js", "MongoDB", "Express", "AWS"],
-    job_location: "Remote",
-    job_type: ["Full-time", "Contract"],
-    job_status: "Active",
-    job_close_date: "2025-10-31",
-    job_category: "Engineering",
-  }
-];
-
-  const initialLocations = [
-    { location_id: 1, location_title: "Remote" },
-    { location_id: 2, location_title: "On-site" },
-    { location_id: 3, location_title: "Hybrid" }
-  ];
-
-  const initialCategories = [
-    { category_id: 1, category_title: "Engineering" },
-    { category_id: 2, category_title: "Design" },
-    { category_id: 3, category_title: "Management" },
-    { category_id: 4, category_title: "Data Science" },
-    { category_id: 5, category_title: "Quality Assurance" },
-    { category_id: 6, category_title: "Content" },
-    { category_id: 7, category_title: "Human Resources" },
-    { category_id: 8, category_title: "Marketing" },
-    { category_id: 9, category_title: "IT Operations" },
-    { category_id: 10, category_title: "Business" },
-    { category_id: 11, category_title: "Security" }
-  ];
-
-  // Set localStorage once
-  useEffect(() => {
-    const alreadyInitialized = localStorage.getItem("isInitialized");
-    if (!alreadyInitialized) {
-      localStorage.setItem("jobs", JSON.stringify(initialJobs));
-      localStorage.setItem("locations", JSON.stringify(initialLocations));
-      localStorage.setItem("categories", JSON.stringify(initialCategories));
-      localStorage.setItem("isInitialized", "true");
+    {
+      job_id: 3,
+      job_title: "DevOps Engineer",
+      job_experience_level: 4,
+      job_technical_skills: ["Docker", "Kubernetes", "Jenkins", "AWS", "Linux"],
+      job_location: "Hybrid",
+      job_type: ["Full-time"],
+      job_status: "Active",
+      job_close_date: "2025-08-15",
+      job_category: "Engineering",
+    },
+    {
+      job_id: 4,
+      job_title: "Product Manager",
+      job_experience_level: 6,
+      job_technical_skills: ["Agile", "JIRA", "Product Strategy", "Analytics"],
+      job_location: "Remote",
+      job_type: ["Full-time"],
+      job_status: "Active",
+      job_close_date: "2025-07-31",
+      job_category: "Management",
+    },
+    {
+      job_id: 5,
+      job_title: "Data Scientist",
+      job_experience_level: 3,
+      job_technical_skills: ["Python", "R", "Machine Learning", "SQL", "TensorFlow"],
+      job_location: "On-site",
+      job_type: ["Full-time", "Part-time"],
+      job_status: "Active",
+      job_close_date: "2025-09-30",
+      job_category: "Data Science",
+    },
+    {
+      job_id: 6,
+      job_title: "Frontend Developer",
+      job_experience_level: 2,
+      job_technical_skills: ["React", "Vue.js", "JavaScript", "CSS", "HTML"],
+      job_location: "Remote",
+      job_type: ["Contract"],
+      job_status: "Active",
+      job_close_date: "2025-05-15",
+      job_category: "Engineering",
+    },
+    {
+      job_id: 7,
+      job_title: "QA Engineer",
+      job_experience_level: 3,
+      job_technical_skills: ["Selenium", "TestNG", "Cypress", "API Testing"],
+      job_location: "Hybrid",
+      job_type: ["Full-time"],
+      job_status: "Active",
+      job_close_date: "2025-10-31",
+      job_category: "Quality Assurance",
+    },
+    {
+      job_id: 8,
+      job_title: "Technical Writer",
+      job_experience_level: 2,
+      job_technical_skills: ["Documentation", "Markdown", "API Documentation"],
+      job_location: "Remote",
+      job_type: ["Part-time", "Contract"],
+      job_status: "Active",
+      job_close_date: "2025-06-15",
+      job_category: "Content",
+    },
+    {
+      job_id: 9,
+      job_title: "Mobile App Developer",
+      job_experience_level: 4,
+      job_technical_skills: ["React Native", "Flutter", "iOS", "Android"],
+      job_location: "On-site",
+      job_type: ["Full-time"],
+      job_status: "Active",
+      job_close_date: "2025-11-30",
+      job_category: "Engineering",
+    },
+    {
+      job_id: 10,
+      job_title: "Cloud Architect",
+      job_experience_level: 7,
+      job_technical_skills: ["AWS", "Azure", "GCP", "Terraform", "CloudFormation"],
+      job_location: "Remote",
+      job_type: ["Full-time"],
+      job_status: "Active",
+      job_close_date: "2025-08-31",
+      job_category: "Engineering",
+    },
+    {
+      job_id: 11,
+      job_title: "HR Manager",
+      job_experience_level: 5,
+      job_technical_skills: ["Recruitment", "Employee Relations", "HR Policies"],
+      job_location: "On-site",
+      job_type: ["Full-time"],
+      job_status: "Active",
+      job_close_date: "2025-07-15",
+      job_category: "Human Resources",
+    },
+    {
+      job_id: 12,
+      job_title: "Blockchain Developer",
+      job_experience_level: 3,
+      job_technical_skills: ["Solidity", "Web3.js", "Smart Contracts", "Ethereum"],
+      job_location: "Remote",
+      job_type: ["Contract"],
+      job_status: "Active",
+      job_close_date: "2025-09-15",
+      job_category: "Engineering",
+    },
+    {
+      job_id: 13,
+      job_title: "Marketing Manager",
+      job_experience_level: 4,
+      job_technical_skills: ["Digital Marketing", "SEO", "Content Strategy"],
+      job_location: "Hybrid",
+      job_type: ["Full-time"],
+      job_status: "Active",
+      job_close_date: "2025-06-30",
+      job_category: "Marketing",
+    },
+    {
+      job_id: 14,
+      job_title: "System Administrator",
+      job_experience_level: 5,
+      job_technical_skills: ["Linux", "Windows Server", "Networking", "Security"],
+      job_location: "On-site",
+      job_type: ["Full-time"],
+      job_status: "Active",
+      job_close_date: "2025-10-15",
+      job_category: "IT Operations",
+    },
+    {
+      job_id: 15,
+      job_title: "Business Analyst",
+      job_experience_level: 3,
+      job_technical_skills: ["SQL", "Data Analysis", "Requirements Gathering"],
+      job_location: "Remote",
+      job_type: ["Full-time", "Part-time"],
+      job_status: "Active",
+      job_close_date: "2025-07-31",
+      job_category: "Business",
+    },
+    {
+      job_id: 16,
+      job_title: "Database Administrator",
+      job_experience_level: 4,
+      job_technical_skills: ["MySQL", "PostgreSQL", "MongoDB", "Database Design"],
+      job_location: "Hybrid",
+      job_type: ["Full-time"],
+      job_status: "Active",
+      job_close_date: "2025-08-31",
+      job_category: "Engineering",
+    },
+    {
+      job_id: 17,
+      job_title: "Project Manager",
+      job_experience_level: 6,
+      job_technical_skills: ["Agile", "Scrum", "Project Planning", "Risk Management"],
+      job_location: "On-site",
+      job_type: ["Full-time"],
+      job_status: "Active",
+      job_close_date: "2025-11-15",
+      job_category: "Management",
+    },
+    {
+      job_id: 18,
+      job_title: "Security Engineer",
+      job_experience_level: 5,
+      job_technical_skills: ["Penetration Testing", "Security Auditing", "SIEM"],
+      job_location: "Remote",
+      job_type: ["Full-time", "Contract"],
+      job_status: "Active",
+      job_close_date: "2025-09-30",
+      job_category: "Security",
+    },
+    {
+      job_id: 19,
+      job_title: "ML Engineer",
+      job_experience_level: 4,
+      job_technical_skills: ["Python", "TensorFlow", "PyTorch", "Deep Learning"],
+      job_location: "Hybrid",
+      job_type: ["Full-time"],
+      job_status: "Active",
+      job_close_date: "2025-12-15",
+      job_category: "Data Science",
+    },
+    {
+      job_id: 20,
+      job_title: "Full Stack Developer",
+      job_experience_level: 3,
+      job_technical_skills: ["React", "Node.js", "MongoDB", "Express", "AWS"],
+      job_location: "Remote",
+      job_type: ["Full-time", "Contract"],
+      job_status: "Active",
+      job_close_date: "2025-10-31",
+      job_category: "Engineering",
     }
+  ];
 
-    // Load jobs from localStorage
-    const savedJobs = JSON.parse(localStorage.getItem("jobs") || "[]");
-    setJob(savedJobs);
-  }, []);
+const App = () => {
+  const [job, setJob] = useState(() => {
+    if (typeof window !== "undefined") {
+      const savedJobs = localStorage.getItem("jobs");
+      return savedJobs ? JSON.parse(savedJobs) : initialJobs;
+    }
+    return initialJobs;
+  });
 
-  const name = localStorage.getItem("email");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobs", JSON.stringify(job));
+    }
+  }, [job]);
+
+  const name = typeof window !== "undefined" ? localStorage.getItem("email") : null;
 
   const routes = (
     <Routes>

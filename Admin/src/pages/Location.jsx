@@ -46,7 +46,7 @@ const AddLocation = ({ onClose, onSubmit, editData, existingLocations }) => {
 
     const locationData = {
       location_id: editData ? editData.location_id : Date.now(),
-      location_title: locationName,
+      location_title: locationName.trim(),
     };
 
     onSubmit(locationData, editData ? "update" : "add");
@@ -111,6 +111,7 @@ AddLocation.propTypes = {
 const Location = () => {
   const [locations, setLocations] = useState(() => {
     const savedLocations = localStorage.getItem("locations");
+    console.log("Loaded locations from localStorage:", savedLocations);
     return savedLocations ? JSON.parse(savedLocations) : initialLocations;
   });
   const [locationForm, setLocationForm] = useState(false);
@@ -118,6 +119,7 @@ const Location = () => {
 
   // Save locations to localStorage whenever they change
   useEffect(() => {
+    console.log("Saving locations to localStorage:", locations);
     localStorage.setItem("locations", JSON.stringify(locations));
   }, [locations]);
 
@@ -150,9 +152,9 @@ const Location = () => {
   };
 
   return (
-    <main className="flex-grow px-6 bg-gray-100">
+    <main className="flex-grow px-6 bg-gray-100 min-h-screen">
       <ToastContainer />
-      <div className="bg-white p-6 rounded-xl shadow-md w-full">
+      <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-4xl mx-auto">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Locations</h1>
@@ -200,12 +202,14 @@ const Location = () => {
                       <button
                         onClick={() => handleEdit(location)}
                         className="text-green-600 hover:text-green-800"
+                        aria-label={`Edit location ${location.location_title}`}
                       >
                         <Edit size={20} />
                       </button>
                       <button
                         onClick={() => handleDelete(location.location_id)}
                         className="text-red-600 hover:text-red-800"
+                        aria-label={`Delete location ${location.location_title}`}
                       >
                         <Trash2 size={20} />
                       </button>
